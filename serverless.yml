@@ -11,10 +11,10 @@ provider:
 
 resources:
   Resources:
-    AuctionsTable:
+    AuctionsTableDEVTEST:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: AuctionsTable
+        TableName: AuctionsTableDEVTEST
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
