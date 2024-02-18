@@ -8,6 +8,13 @@ provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
+  region: 'us-east-1'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      Resource:
+        - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/AuctionsTableDEVTEST
 
 resources:
   Resources:
