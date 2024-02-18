@@ -8,7 +8,9 @@ provider:
   name: aws
   runtime: nodejs18.x
   stage: ${opt:stage, 'dev'}
-  region: 'us-east-1'
+  region: us-east-1
+  environment:
+    AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
 
@@ -23,3 +25,8 @@ functions:
       - http:
           method: POST
           path: /createAuction
+
+custom:
+  AuctionsTable:
+    name: !Ref AuctionsTableDEVTEST
+    arn: !GetAtt AuctionsTableDEVTEST.Arn
