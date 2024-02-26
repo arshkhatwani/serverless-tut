@@ -4,8 +4,10 @@ import httpEventNormalizer from "@middy/http-event-normalizer";
 import httpErrorHandler from "@middy/http-error-handler";
 
 export default (handler) =>
-    middy(handler).use(
-        httpJsonBodyParser({ disableContentTypeError: true }),
-        httpEventNormalizer(),
-        httpErrorHandler()
-    );
+    middy()
+        .use(
+            httpJsonBodyParser({ disableContentTypeError: true }),
+            httpEventNormalizer(),
+            httpErrorHandler()
+        )
+        .handler(handler);
