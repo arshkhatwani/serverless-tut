@@ -5,15 +5,25 @@ import commonMiddleware from "../lib/commonMiddleware";
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 async function getAuctions(event, context) {
+    const { status } = event.queryStringParameters;
     let auctions;
 
-    console.log("Retrieving auctions from DB");
+    console.log("query status:", status);
+    const params = {
+        TableName: process.env.AUCTIONS_TABLE_NAME,
+        IndexName: "statusAndEndDate",
+        KeyConditionExpression: "#status = :status",
+        ExpressionAttributeNames: {
+            "#status": "status",
+        },
+        ExpressionAttributeValues: {
+            ":status": status,
+        },
+    };
+
+    console.log("Retrieving auctions from DB with status:", status);
     try {
-        const result = await dynamodb
-            .scan({
-                TableName: process.env.AUCTIONS_TABLE_NAME,
-            })
-            .promise();
+        const result = await dynamodb.query(params).promise();
         auctions = result.Items;
         console.log("Retrieved auctions successfully");
     } catch (error) {
