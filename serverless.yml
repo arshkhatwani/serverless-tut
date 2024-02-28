@@ -13,6 +13,7 @@ provider:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iamRoleStatements:
     - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+    - ${file(iam/SendMailIAM.yml):SendMailIAM}
 
 resources:
   Resources:
@@ -47,6 +48,8 @@ functions:
     handler: src/handlers/processAuctions.handler
     # events:
     #   - schedule: rate(1 hour)
+  sendMail:
+    handler: src/handlers/sendMail.handler
 
 custom:
   AuctionsTable:
