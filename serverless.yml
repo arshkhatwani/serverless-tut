@@ -18,6 +18,7 @@ provider:
 resources:
   Resources:
     AuctionsTableDEVTEST: ${file(resources/AuctionsTableDEVTEST.yml):AuctionsTableDEVTEST}
+    MailQueue: ${file(resources/MailQueue.yml):MailQueue}
 
 functions:
   createAuction:
@@ -50,8 +51,15 @@ functions:
     #   - schedule: rate(1 hour)
   sendMail:
     handler: src/handlers/sendMail.handler
+    events:
+      - sqs:
+          batchSize: 1
+          arn: ${self:custom.MailQueue.arn}
 
 custom:
   AuctionsTable:
     name: !Ref AuctionsTableDEVTEST
     arn: !GetAtt AuctionsTableDEVTEST.Arn
+  MailQueue:
+    name: MailQueue-${self:provider.stage}
+    arn: !GetAtt MailQueue.Arn
