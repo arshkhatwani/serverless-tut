@@ -55,6 +55,8 @@ functions:
       - sqs:
           batchSize: 1
           arn: ${self:custom.MailQueue.arn}
+    environment:
+      SOURCE_EMAIL: ${env:SOURCE_EMAIL}
 
 custom:
   AuctionsTable:
