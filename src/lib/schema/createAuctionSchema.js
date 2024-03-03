@@ -1,6 +1,6 @@
 const createAuctionSchema = {
     type: "object",
-    required: ["body"],
+    required: ["body", "requestContext"],
     properties: {
         body: {
             type: "object",
@@ -8,6 +8,22 @@ const createAuctionSchema = {
             properties: {
                 title: {
                     type: "string",
+                },
+            },
+        },
+        requestContext: {
+            type: "object",
+            required: ["authorizer"],
+            properties: {
+                authorizer: {
+                    type: "object",
+                    required: ["principalId"],
+                    properties: {
+                        principalId: {
+                            type: "string",
+                            format: "email",
+                        },
+                    },
                 },
             },
         },

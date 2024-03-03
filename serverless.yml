@@ -28,12 +28,15 @@ functions:
       - http:
           method: POST
           path: /login
+  verifyToken:
+    handler: src/handlers/verifyToken.handler
   createAuction:
     handler: src/handlers/createAuction.handler
     events:
       - http:
           method: POST
           path: /createAuction
+          authorizer: verifyToken
   getAuctions:
     handler: src/handlers/getAuctions.handler
     events:
