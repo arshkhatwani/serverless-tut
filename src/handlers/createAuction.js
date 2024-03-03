@@ -5,6 +5,7 @@ import commonMiddleware from "../lib/commonMiddleware";
 import validator from "@middy/validator";
 import { transpileSchema } from "@middy/validator/transpile";
 import createAuctionSchema from "../lib/schema/createAuctionSchema";
+import sendMessageToMailQueue from "../lib/sendMessageToMailQueue";
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
@@ -38,6 +39,13 @@ async function createAuction(event, context) {
             })
             .promise();
         console.log("Successfully created auction:", auction);
+
+        const messageBody = {
+            subject: "New Auction Created!",
+            body: `Congratulations! Your new auction with title (${title}) is created successfully.`,
+            recipient: userEmail,
+        };
+        await sendMessageToMailQueue(messageBody);
     } catch (error) {
         console.error(error);
         throw new createError.InternalServerError(error);
